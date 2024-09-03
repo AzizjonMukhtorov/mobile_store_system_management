@@ -11,7 +11,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 
 
-from .serializers import CustomUserSerializer, RegisterSerializer, RoleSerializer
+from .serializers import (CustomUserSerializer, RegisterSerializer, 
+                          RoleSerializer, LogoutSerializer)
 from .models import Role
 
 
@@ -20,34 +21,37 @@ CustomUser = get_user_model()
 class RoleCreateView(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = (IsAdminUser, )
 
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = RegisterSerializer
-    permission_classes = [AllowAny]
+    permission_classes = (AllowAny, )
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
+    serializer_class = LogoutSerializer
 
     def post(self, request):
+        
         try:
-            refresh_token = request.data.get("refresh")
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             
             return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
-        except Exception as ex:
-            return Response({"detail": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
         
+        except Exception as ex:
+            print(ex, "SALOM")
+            return Response({"detail": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomUserDetailView(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # You can change this to IsAuthenticated for more security
+    permission_classes = (IsAuthenticated, )  # You can change this to IsAuthenticated for more security
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
