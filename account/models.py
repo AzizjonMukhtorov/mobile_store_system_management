@@ -17,7 +17,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         if role is None:
-            role, created = Role.objects.get_or_create(title='SuperUser')
+            role, _ = Role.objects.get_or_create(title='SuperUser')
         # Ensure role is a Role instance
         if isinstance(role, int):  # If role is passed as an ID
             role = Role.objects.get(pk=role)

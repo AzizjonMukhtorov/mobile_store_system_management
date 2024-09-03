@@ -44,7 +44,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
     
     def create(self, validated_data):
-        role, created = Role.objects.get_or_create(title='SimpleUser')
+        role, _ = Role.objects.get_or_create(title='SimpleUser')
         validated_data['role'] = role
         user = CustomUser.objects.create(
             name = validated_data['name'],

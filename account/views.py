@@ -1,7 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import (IsAuthenticatedOrReadOnly, 
-                                        AllowAny, IsAdminUser, 
+from rest_framework.permissions import (AllowAny, IsAdminUser, 
                                         IsAuthenticated)
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -9,7 +8,6 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth import get_user_model
-
 
 from .serializers import (CustomUserSerializer, RegisterSerializer, 
                           RoleSerializer, LogoutSerializer)
@@ -44,7 +42,6 @@ class LogoutView(APIView):
             return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
         
         except Exception as ex:
-            print(ex, "SALOM")
             return Response({"detail": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -65,4 +62,3 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
-                           
