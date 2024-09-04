@@ -16,7 +16,7 @@ from .models import Role
 
 CustomUser = get_user_model()
 
-class RoleCreateView(viewsets.ModelViewSet):
+class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
     permission_classes = (IsAdminUser, )

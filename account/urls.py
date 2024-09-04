@@ -2,10 +2,10 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import routers
 
-from .views import RegisterView, CustomUserDetailView, RoleCreateView, LogoutView
+from .views import RegisterView, CustomUserDetailView, RoleViewSet, LogoutView
 
 router = routers.DefaultRouter()
-router.register(r'users', RoleCreateView)
+router.register(r'users', RoleViewSet)
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
